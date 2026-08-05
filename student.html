@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Registration Form</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background: #c0adad;
+}
+
+form{
+    width: 400px;
+    margin: 40px auto;
+    background: rgb(191, 219, 198);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+h2{
+    text-align: center;
+}
+
+label{
+    font-weight: bold;
+}
+
+input{
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0 15px;
+    box-sizing: border-box;
+}
+
+.gender{
+    margin: 10px 0 15px;
+}
+
+.gender input{
+    width: auto;
+    margin-right: 5px;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-between;
+}
+
+button{
+    width: 48%;
+    padding: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit{
+    background: green;
+}
+
+.reset{
+    background: red;
+}
+</style>
+
+<script>
+function register(event){
+
+    event.preventDefault();
+
+    let fname = document.getElementById("fname").value.trim();
+    let lname = document.getElementById("lname").value.trim();
+    let roll = document.getElementById("roll").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let mobile = document.getElementById("mobile").value.trim();
+
+    let gender = document.querySelector('input[name="gender"]:checked');
+
+    }
+
+    // Mobile validation
+        alert("Mobile number must contain exactly 10 digits.");
+        return;
+    }
+
+    alert("Student Registration Successful!");
+}
+</script>
+
+</head>
+
+<body>
+
+<form onsubmit="register(event)">
+
+<h2>Student Registration</h2>
+
+<label>First Name:</label>
+<input type="text" id="fname">
+
+<label>Last Name:</label>
+<input type="text" id="lname">
+
+<label>Roll Number:</label>
+<input type="text" id="roll">
+
+<label>Email:</label>
+<input type="email" id="email">
+
+<label>Mobile Number:</label>
+<input type="text" id="mobile" maxlength="10" placeholder="Enter 10-digit mobile number">
+
+<label>Gender:</label>
+
+<div class="gender">
+<input type="radio" name="gender" value="Male"> Male
+<input type="radio" name="gender" value="Female"> Female
+<input type="radio" name="gender" value="Other"> Other
+</div>
+
+<div class="buttons">
+<button type="submit" class="submit">Submit</button>
+<button type="reset" class="reset">Reset</button>
+</div>
+
+</form>
+
+</body>
+</html>
