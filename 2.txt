@@ -1,0 +1,69 @@
+Simple Hello World
+1.Create a new Freestyle project
+Go to your Jenkins dashboard:
+Click New Item.
+Enter the name:simple-hello
+Select:Freestyle project
+Click OK.
+2.Go to Build Steps
+On the configuration page, scroll down to:
+Build Steps
+Click:Add build step
+Select:Execute Windows batch command
+3.Enter the command
+You will get a Command box.
+Enter:echo Hello, Jenkins!
+Workspace Variable
+create a new Freestyle project
+1.Go to Jenkins:Click New Item.
+Enter:workspace-variable
+Select Freestyle project.
+Click OK.
+Step 2 — Go to Build Steps
+Scroll down to:
+Build Steps → Add build step
+Select:Execute Windows batch command
+3.Enter the command
+echo Workspace: %WORKSPACE%
+File Creation and Copy
+1.Create a new Freestyle project
+In Jenkins:
+Click New Item
+Enter:file-creation-copy
+Select Freestyle project
+Click OK
+2.Add the build step
+Scroll down to:Build Steps
+Click:Add build step → Execute Windows batch command
+3.echo Hello Jenkins > file1.txt
+copy file1.txt file2.txt
+ Parameterized Freestyle
+1.Create a new project
+Go to:Jenkins → New Item
+Enter:parameterized-freestyle
+Select:Freestyle project
+Then click OK.
+2.Enable parameterization
+On the configuration page, find:
+Select:This project is parameterized
+3.Add String Parameter
+Click:
+Add Parameter → String Parameter
+Set:
+Name:NAME
+Description: Enter your name
+ 4 — Add Windows command
+Scroll down to:
+Build Steps → Add build step → Execute Windows batch command
+Enter:echo Hello %NAME%
+Scheduled Freestyle
+2.Set the schedule
+Find:
+Build Triggers
+Select:Build periodically
+TZ=Asia/Kolkata
+H 21 * * *
+3.Add the Windows command
+Scroll down to:Build Steps
+Click:Add build step → Execute Windows batch command
+Enter:echo Scheduled Freestyle Job
