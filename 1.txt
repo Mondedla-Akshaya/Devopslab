@@ -1,0 +1,186 @@
+Simple Echo pipeline
+1.Click New Item.
+Enter a name
+simple-pipeline
+Click OK.
+2.Scroll down to the Pipeline section.
+Pipeline script
+3.pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
+Multi-stage Pipeline
+1.Create a Pipeline
+Click New Item.
+Enter a name multi-pipeline
+Select Pipeline.
+Click OK.
+2.Scroll down to Pipeline
+Pipeline script
+3.pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building project'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running Tests'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the application'
+            }
+        }
+    }
+}
+Scheduled Pipeline
+1.Create a new Pipeline
+Go to the Jenkins dashboard.
+Click New Item.
+Enter: scheduled-pipeline
+Select Pipeline.
+Click OK.
+2.Set the schedule
+Scroll to Build Triggers.
+Select: Build periodically
+TZ=Asia/Kolkata
+H 21 * * *
+3.Write the Pipeline script
+Scroll down to Pipeline.
+Definition → Pipeline script
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building project'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running Tests'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application'
+            }
+        }
+    }
+}
+Workspace File Handling
+1.Create a new Pipeline
+In Jenkins:
+Go to the Jenkins dashboard.
+Click New Item: workspace-file-handling
+Select Pipeline.
+Click OK.
+2.Scroll down to the Pipeline section.
+Click Pipeline Syntax.
+3.Find Sample Step.
+Select:
+write File: Write file to workspace
+4.File:
+pipeline.txt
+Text:
+Created by Jenkins Pipeline
+Generate Pipeline Script
+writeFile file: 'pipeline.txt', text: 'Created by Jenkins Pipeline'
+5.Go back to your Pipeline configuration.
+pipeline {
+    agent any
+
+    stages {
+        stage('Create File') {
+            steps {
+                writeFile file: 'pipeline.txt', text: 'Created by Jenkins Pipeline'
+            }
+        }
+    }
+}
+Parameterized Pipeline
+1.Create a new Pipeline
+Go to Jenkins dashboard.
+Click New Item.
+Enter a name: parameterized-pipeline
+Select Pipeline.
+Click OK.
+2.Go to Pipeline section
+Scroll down to:Pipeline
+Select:Definition → Pipeline script
+3.Enter the script
+pipeline {
+    agent any
+
+    parameters {
+        string(
+            name: 'USERNAME',
+            defaultValue: '',
+            description: 'Enter your name'
+        )
+    }
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo "Hello, ${params.USERNAME}"
+            }
+        }
+    }
+}
+4.Click Build with Parameters
+Git-Integrated Pipeline
+Step 1: Create a new Pipeline
+In Jenkins:Go to the dashboard.
+Click New Item.
+Enter:git-pipeline
+Select Pipeline.
+Click OK.
+2.Go to Pipeline section
+Scroll down until you find Pipeline.
+For Definition, select:
+Pipeline script
+
+3..
+Enter the Pipeline script
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/KatkamNiharika/25265A0519.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building project'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing project'
+            }
+        }
+    }
+}
