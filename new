@@ -1,0 +1,93 @@
+             file creation and copy -freestyle:
+echo Workspace location is:
+echo %WORKSPACE%
+
+echo.
+echo Creating a file in workspace...
+
+echo Hello Jenkins Workspace > "%WORKSPACE%\test.txt"
+
+echo File created successfully.
+
+               integrated pipeline:
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/yourusername/Jenkins_integrated.git'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing code...'
+            }
+        }
+    }
+}   
+
+                      scheduled pipeline:
+pipeline {
+    agent any
+
+    triggers {
+        cron('H * * * *')
+    }
+
+    stages {
+        stage('Show Time') {
+            steps {
+                powershell 'Get-Date'
+            }
+        }
+    }
+} 
+
+                      param pipeline:
+pipeline {
+    agent any
+    parameters {
+        string(name: 'USERNAME', defaultValue: 'enter your name', description: 'Enter your name')
+    }
+    stages {
+        stage('1') {
+            steps {
+                echo "1 ${params.USERNAME}"
+            }
+        }
+    }
+}
+
+                         student html:
+<!DOCTYPE html>
+<html>
+<head>
+<title>event registration</title>
+</head>
+<body>
+<h2>event registration</h2>
+<form>
+<label>NAME:</label>
+<input type="text" name="NAME"><br><br>
+<label>email:</label>
+<input type="email" name="email"><br><br>
+<label>phone:</label>
+<input type="tel" name="phone"><br><br>
+<label>gender</label>
+<input type="radio" name="gender" value="male">male
+<input type="radio" name="gender" value="female">female<br><br>
+<label>event:</label>
+<select id="event" name="event">
+<option>workshop</option>
+<option>hacksavy</option>
+<option>hackathon</option>
+</select><br><br>
+
+<input type="submit" value="register">
+</form>
+</body>
+</html>
