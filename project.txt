@@ -1,0 +1,617 @@
+Here is your complete Docker, Kubernetes and Selenium Lab Record in text format, arranged set-wise for easy reading and copying.
+DOCKER, KUBERNETES AND SELENIUM LAB RECORD
+RED = Type in Notepad
+BLUE = Commands to execute in CMD / Terminal
+Important: When saving files in Notepad:
+Select File → Save As.
+Choose Save as type: All Files.
+Enter the exact filename.
+Save inside the correct folder.
+SET 1: DOCKER BASICS
+Q1(A) Pull an image and list active containers
+Commands:
+docker pull ubuntu
+docker images
+docker ps
+Q1(B) Check Docker installation
+Commands:
+docker --version
+docker info
+docker run hello-world
+docker images
+docker ps -a
+SET 2: DOCKERFILE AND IMAGE
+Q2(A) Develop a simple containerized application using Docker
+Step 1: Create a folder
+mkdir dockerapp
+cd dockerapp
+Step 2: Create index.html in Notepad
+File name: index.html
+HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Docker App</title>
+</head>
+<body>
+    <h1>Hello from Docker!</h1>
+</body>
+</html>
+Step 3: Create Dockerfile
+File name: Dockerfile (No extension)
+FROM nginx:latest
+COPY index.html /usr/share/nginx/html/index.html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+Step 4: Build and run
+docker build -t myapp .
+docker run -d -p 8080:80 --name mycontainer myapp
+Browser:
+http://localhost:8080
+Q2(B) Create a Docker image with a custom tag and port
+Commands:
+docker build -t myapp:v1 .
+docker images
+docker run -d -p 8081:80 --name mycontainer2 myapp:v1
+docker ps
+Browser:
+http://localhost:8081
+SET 3: KUBERNETES AND DOCKER
+Q3(A) Configure Kubernetes with Docker
+Step 1: Enable Kubernetes
+Open Docker Desktop.
+Go to Settings.
+Select Kubernetes.
+Enable Kubernetes.
+Click Apply.
+Step 2: Execute commands inside dockerapp folder
+docker build -t myapp:v1 .
+kubectl version --client
+kubectl cluster-info
+kubectl get nodes
+Step 3: Create deployment.yaml
+File name: deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: myapp:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+Step 4: Apply deployment
+kubectl apply -f deployment.yaml
+kubectl get deployments
+kubectl get pods
+Q3(B) Write a Kubernetes setup script
+Step 1: Create setup.sh
+#!/bin/bash
+
+echo "Building Docker image"
+docker build -t myapp:v1 .
+
+echo "Checking Docker images"
+docker images
+
+echo "Deploying application"
+kubectl apply -f deployment.yaml
+
+echo "Checking pods"
+kubectl get pods
+
+echo "Setup completed"
+Step 2: Run in Git Bash
+bash setup.sh
+SET 4: KUBERNETES DEPLOYMENT AND SERVICE
+Q4(A) Create a Kubernetes deployment
+Step 1: Create deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+Step 2: Apply deployment
+kubectl apply -f deployment.yaml
+kubectl get deployments
+kubectl get pods
+Q4(B) Expose the application using Kubernetes Service
+Step 1: Create service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  type: NodePort
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+Step 2: Apply service
+kubectl apply -f service.yaml
+kubectl get services
+Browser:
+http://localhost:30080
+Alternative access:
+kubectl port-forward service/nginx-service 8080:80
+Browser:
+http://localhost:8080
+SET 5: SELENIUM INSTALLATION AND WEBDRIVER
+Q5(A) Install Selenium and verify installation
+Step 1: Install Selenium
+pip install selenium
+pip show selenium
+Step 2: Create test.py
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("https://www.google.com")
+
+print("Page Title:", driver.title)
+
+assert "Google" in driver.title
+
+driver.quit()
+Step 3: Run the program
+python test.py
+Q5(B) Verify the page title using Selenium
+Step 1: Create title_test.py
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("https://www.google.com")
+
+title = driver.title
+print("Title:", title)
+
+if "Google" in title:
+    print("Test Passed")
+else:
+    print("Test Failed")
+
+driver.quit()
+Step 2: Run the program
+python title_test.py
+SET 6: SELENIUM WITH JAVASCRIPT
+Q6(A) Perform a JavaScript test using Selenium
+Step 1: Create a folder and install packages
+mkdir seleniumjs
+cd seleniumjs
+npm init -y
+npm install selenium-webdriver
+Step 2: Create test.js
+const { Builder } = require('selenium-webdriver');
+
+async function test() {
+
+    let driver = await new Builder()
+        .forBrowser('chrome')
+        .build();
+
+    try {
+
+        await driver.get('https://www.google.com');
+
+        let title = await driver.getTitle();
+
+        console.log("Page Title:", title);
+
+        if (title.includes("Google")) {
+            console.log("Test Passed");
+        } else {
+            console.log("Test Failed");
+        }
+
+    } finally {
+        await driver.quit();
+    }
+}
+
+test();
+Step 3: Run the program
+node test.js
+Q6(B) Locate an element by ID and click using Selenium
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Test</title>
+</head>
+<body>
+
+    <h2>Click Button</h2>
+
+    <button id="submit">Submit</button>
+
+    <p id="result"></p>
+
+    <script>
+        document.getElementById("submit").onclick = function() {
+            document.getElementById("result").innerHTML =
+                "Button Clicked Successfully";
+        };
+    </script>
+
+</body>
+</html>
+Step 1: Create button.html
+HTML
+Step 2: Create click.js
+const { Builder, By } = require('selenium-webdriver');
+
+async function test() {
+
+    let driver = await new Builder()
+        .forBrowser('chrome')
+        .build();
+
+    try {
+
+        await driver.get('http://localhost:8000/button.html');
+
+        let button = await driver.findElement(By.id('submit'));
+
+        await button.click();
+
+        console.log("Button clicked successfully");
+
+    } finally {
+        await driver.quit();
+    }
+}
+
+test();
+Step 3: Open CMD Window 1
+Inside the folder containing button.html:
+python -m http.server 8000
+Step 4: Open CMD Window 2
+node click.js
+SET 7: REGISTRATION FORM TESTING
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+</head>
+<body>
+
+    <h2>Registration Form</h2>
+
+    <form id="form">
+        <input type="text" id="username"
+               placeholder="Enter Username">
+
+        <button type="submit" id="submit">
+            Register
+        </button>
+    </form>
+
+    <p id="success"></p>
+
+    <script>
+        document.getElementById("form").onsubmit =
+        function(event) {
+            event.preventDefault();
+
+            document.getElementById("success").innerHTML =
+                "Registration Successful";
+        };
+    </script>
+
+</body>
+</html>
+Note: Server steps are the same as Set 6.
+Q7(A) Submit a registration form using Selenium
+Step 1: Create registration.html
+HTML
+Step 2: Create register.py
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+
+driver.get("http://localhost:8000/registration.html")
+
+driver.find_element(By.ID, "username").send_keys("John")
+
+driver.find_element(By.ID, "submit").click()
+
+print(driver.find_element(By.ID, "success").text)
+
+driver.quit()
+Step 3: CMD Window 1
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Validation Form</title>
+</head>
+<body>
+
+    <h2>Registration</h2>
+
+    <input type="text" id="username"
+           placeholder="Enter Username">
+
+    <button id="submit">Submit</button>
+
+    <p id="message"></p>
+
+    <script>
+        document.getElementById("submit").onclick =
+        function() {
+
+            let name =
+                document.getElementById("username").value;
+
+            if (name.length >= 3) {
+                document.getElementById("message").innerHTML =
+                    "Registration Successful";
+            } else {
+                document.getElementById("message").innerHTML =
+                    "Invalid Username";
+            }
+        };
+    </script>
+
+</body>
+</html>
+python -m http.server 8000
+Step 4: CMD Window 2
+python register.py
+Q7(B) Validate user input using Selenium
+Step 1: Create validation.html
+HTML
+Step 2: Create validate.py
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+
+driver.get("http://localhost:8000/validation.html")
+
+driver.find_element(By.ID, "username").send_keys("John")
+
+driver.find_element(By.ID, "submit").click()
+
+message = driver.find_element(By.ID, "message").text
+
+print("Message:", message)
+
+if message == "Registration Successful":
+    print("Test Passed")
+else:
+    print("Test Failed")
+
+driver.quit()
+Step 3: CMD Window 1
+python -m http.server 8000
+Step 4: CMD Window 2
+python validate.py
+SET 8: SELENIUM TESTING USING DOCKER
+Q8(A) Create a Docker image for Selenium
+Step 1: Create a folder
+mkdir selenium-docker
+cd selenium-docker
+Step 2: Create requirements.txt
+selenium
+Step 3: Create test.py
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+options = webdriver.ChromeOptions()
+
+driver = webdriver.Remote(
+    command_executor="http://selenium:4444",
+    options=options
+)
+
+try:
+
+    driver.get("https://www.google.com")
+
+    print("Page Title:", driver.title)
+
+    assert "Google" in driver.title
+
+    print("Test Passed")
+
+finally:
+    driver.quit()
+Step 4: Create Dockerfile
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY test.py .
+
+CMD ["python", "test.py"]
+Step 5: Build Docker image
+docker build -t selenium-test .
+Q8(B) Run Selenium tests inside Docker
+Commands:
+docker network create selenium-net
+
+docker run -d --name selenium --network selenium-net -p 4444:4444 selenium/standalone-chrome
+
+docker build -t selenium-test .
+
+docker run --rm --network selenium-net selenium-test
+
+docker ps
+Cleanup commands:
+docker stop selenium
+docker rm selenium
+SET 9: RUN APPLICATION AND SELENIUM TESTS
+Q9(A) Run a containerized application and test it using Selenium
+Step 1: Create a folder
+mkdir finalapp
+cd finalapp
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Docker Selenium App</title>
+</head>
+<body>
+
+    <h1>Welcome to My Application</h1>
+
+    <button id="submit">Click Me</button>
+
+    <p id="message"></p>
+
+    <script>
+        document.getElementById("submit").onclick =
+        function() {
+            document.getElementById("message").innerHTML =
+                "Test Successful";
+        };
+    </script>
+
+</body>
+</html>
+Step 2: Create index.html
+HTML
+Step 3: Create Dockerfile
+FROM nginx:latest
+
+COPY index.html /usr/share/nginx/html/index.html
+
+EXPOSE 80
+Step 4: Create requirements.txt
+selenium
+Step 5: Create test.py
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = None
+
+try:
+
+    for attempt in range(15):
+        try:
+            driver = webdriver.Remote(
+                command_executor="http://selenium:4444",
+                options=webdriver.ChromeOptions()
+            )
+            break
+        except Exception:
+            time.sleep(2)
+
+    if driver is None:
+        raise Exception("Selenium server is not ready")
+
+    driver.get("http://webapp")
+
+    print("Page Title:", driver.title)
+
+    driver.find_element(By.ID, "submit").click()
+
+    message = driver.find_element(By.ID, "message").text
+
+    print("Message:", message)
+
+    assert message == "Test Successful"
+
+    print("Test Passed")
+
+finally:
+    if driver:
+        driver.quit()
+Step 6: Create docker-compose.yml
+services:
+
+  webapp:
+    build: .
+    container_name: webapp
+    ports:
+      - "8080:80"
+
+  selenium:
+    image: selenium/standalone-chrome
+    container_name: selenium
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      - webapp
+      - selenium
+Step 7: Create Dockerfile.test
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY test.py .
+
+CMD ["python", "test.py"]
+Step 8: Run the application
+docker compose up --build
+Browser:
+http://localhost:8080
+Step 9: Stop the application
+docker compose down
+Q9(B) Lab Implementation Report
+Write this in your record book or Word document.
+TITLE:
+Selenium Testing Using Docker
+AIM:
+To containerize an application and execute automated Selenium tests using Docker.
+SOFTWARE REQUIRED:
+Docker Desktop
+Selenium
+Python
+Google Chrome
+Notepad
+PROCEDURE:
+Create an HTML application.
+Create a Dockerfile.
+Build the Docker image.
+Create a Selenium testing script.
+Configure Docker Compose.
+Start application and Selenium containers.
+Execute automated tests.
+Verify the test results.
+RESULT:
+The application was successfully containerized and tested using Selenium automation.
+COMMON MISTAKES
+Dockerfile must have no .txt extension.
+Always enter the correct folder using cd.
+Keep Docker Desktop running.
+All 9 sets (Q1–Q9) are included above, following the uploaded lab record's organization and code.
